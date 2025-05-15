@@ -1,0 +1,6 @@
+# requirements.txt for CIFO_EXTENDED_DEV_VALIDATED
+# Data analysis and notebook essentials
+numpy==1.26.4
+pandas==2.2.2
+matplotlib==3.8.4
+# Add other project-specific dependencies below
