@@ -1,4 +1,5 @@
 import random
+import numpy as np
 from operators import (
     mutate_swap,
     mutate_team_shift,
@@ -92,3 +93,54 @@ def hill_climbing(players, max_iterations=1000, verbose=False):
             break
 
     return current, current_fitness, history
+
+import numpy as np 
+
+def simulated_annealing(players, max_iterations=1000, initial_temp=100.0, cooling_rate=0.995, verbose=False):
+    num_players = len(players)
+
+    # Retry until valid initial solution
+    while True:
+        current_solution = LeagueSolution([random.randint(0, 4) for _ in range(num_players)])
+        if current_solution.is_valid(players):
+            break
+
+    current_fitness = current_solution.fitness(players)
+    best_solution = current_solution.copy()
+    best_fitness = current_fitness
+    history = [current_fitness]
+
+    temp = initial_temp
+    iteration = 0
+
+    while iteration < max_iterations and temp > 0.1:
+        neighbor = mutate_swap(current_solution)
+        if not neighbor.is_valid(players):
+            continue
+
+        neighbor_fitness = neighbor.fitness(players)
+        delta = neighbor_fitness - current_fitness
+
+        if delta <= 0 or random.random() < np.exp(-delta / temp):
+            current_solution = neighbor
+            current_fitness = neighbor_fitness
+            if current_fitness < best_fitness:
+                best_solution = current_solution.copy()
+                best_fitness = current_fitness
+
+        history.append(current_fitness)
+        temp *= cooling_rate
+        iteration += 1
+
+        if verbose and iteration % 100 == 0:
+            print(f"Iteration {iteration}: fitness = {current_fitness:.6f}, temp = {temp:.2f}")
+
+    return best_solution, history, best_fitness
+
+
+
+
+
+
+
+

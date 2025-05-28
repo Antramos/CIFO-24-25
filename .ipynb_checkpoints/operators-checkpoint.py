@@ -4,12 +4,13 @@ from copy import deepcopy
 from solution import LeagueSolution
 
 # MUTATION OPERATORS --------
-
 def mutate_swap(solution):
     new_assign = solution.assignment[:]
     i, j = random.sample(range(len(new_assign)), 2)
     new_assign[i], new_assign[j] = new_assign[j], new_assign[i]
     return LeagueSolution(new_assign)
+
+
 
 def mutate_team_shift(solution):
     new_assign = solution.assignment[:]
